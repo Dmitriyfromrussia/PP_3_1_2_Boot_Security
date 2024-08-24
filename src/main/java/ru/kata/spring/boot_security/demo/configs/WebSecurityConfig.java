@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  //Все CRUD-операции и страницы для них должны быть доступны только пользователю с ролью admin по url: /admin/
                 .antMatchers("/admin/**").hasRole("admin")
 
-                .antMatchers("/users").hasAnyRole("user", "admin")
+                .antMatchers("/users").hasAnyRole("user", "admin") // !!! ПОТОМ ИСПРАВИТЬ НА user
                 //.antMatchers().authenticated() РАЗОБРАТЬСЯ С authenticated
                 .anyRequest().authenticated() //есть учетка на сайте
                 .and()
