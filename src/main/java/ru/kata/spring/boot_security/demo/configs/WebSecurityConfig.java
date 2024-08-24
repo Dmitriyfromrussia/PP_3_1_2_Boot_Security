@@ -23,13 +23,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/index").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/", "/index").permitAll() //доступно всем заходящим
+
+ //Все CRUD-операции и страницы для них должны быть доступны только пользователю с ролью admin по url: /admin/
+                .antMatchers("/admin/**").hasRole("admin")
+
+                .antMatchers("/users").hasAnyRole("user", "admin")
+                //.antMatchers().authenticated() РАЗОБРАТЬСЯ С authenticated
+                .anyRequest().authenticated() //есть учетка на сайте
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin().successHandler(successUserHandler)//это стандартная форма заполнения даных
                 .permitAll()
                 .and()
-                .logout()
+                .logout()// .logoutSuccessUrl("/") -- куда провалится после logout По умолчанию доступ к URL "/logout" приведет к выходу
                 .permitAll();
     }
 
