@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  //Все CRUD-операции и страницы для них должны быть доступны только пользователю с ролью admin по url: /admin/
                 .antMatchers("/admin/**").hasRole("admin")
 
-                .antMatchers("/users").hasAnyRole("user", "admin") // !!! ПОТОМ ИСПРАВИТЬ НА user
+                .antMatchers("/user").hasAnyRole("user", "admin") // !!! ПОТОМ ИСПРАВИТЬ НА user
                 //.antMatchers().authenticated() РАЗОБРАТЬСЯ С authenticated
                 .anyRequest().authenticated() //есть учетка на сайте
                 .and()
@@ -44,12 +44,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsService() {
         UserDetails user =
-                User.withDefaultPasswordEncoder()
+                User.builder() // оказывается обязательно шифровать надо!!!
                         .username("user")
-                        .password("user")
+                        .password("{bcrypt}$2a$12$jgkQ8uqr.hwnmBTRpej2LuOyMUGrFftyua6XJv6/xe/RVwjmGhcCu") // "{bcrypt}$2a$12$jgkQ8uqr.hwnmBTRpej2LuOyMUGrFftyua6XJv6/xe/RVwjmGhcCu" user
                         .roles("USER")
                         .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("{bcrypt}$2a$12$sWHEI.Ex0KsVDxtdG1mfmen3WSFEwS4KW5/ffDQsCNVNIkNPXLrM6")
+                .roles("ADMIN") // "USER",
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
+
 }
