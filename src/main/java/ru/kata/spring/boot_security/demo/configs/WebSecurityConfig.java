@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/index").permitAll() //доступно всем заходящим
 
- //Все CRUD-операции и страницы для них должны быть доступны только пользователю с ролью admin по url: /admin/
+                //Все CRUD-операции и страницы для них должны быть доступны только пользователю с ролью admin по url: /admin/
                 .antMatchers("/admin/**").hasRole("admin")
 
                 .antMatchers("/user").hasAnyRole("user", "admin") // !!! ПОТОМ ИСПРАВИТЬ НА user
@@ -39,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-    // аутентификация inMemory
+//    // аутентификация inMemory
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
@@ -59,4 +62,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryUserDetailsManager(user, admin);
     }
 
+    //jdbcAutentification
+
+//    @Bean
+//    public JdbcUserDetailsManager users(DataSource dataSource) {
+//        UserDetails user = User.builder() // оказывается обязательно шифровать надо!!!
+//                .username("user")
+//                .password("{bcrypt}$2a$12$jgkQ8uqr.hwnmBTRpej2LuOyMUGrFftyua6XJv6/xe/RVwjmGhcCu") // "{bcrypt}$2a$12$jgkQ8uqr.hwnmBTRpej2LuOyMUGrFftyua6XJv6/xe/RVwjmGhcCu" user
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password("{bcrypt}$2a$12$sWHEI.Ex0KsVDxtdG1mfmen3WSFEwS4KW5/ffDQsCNVNIkNPXLrM6")
+//                .roles("ADMIN") // "USER",
+//                .build();
+//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+//        if (jdbcUserDetailsManager.userExists(user.getUsername())) {
+//            jdbcUserDetailsManager.deleteUser(user.getUsername());
+//        }
+//        if (jdbcUserDetailsManager.userExists(admin.getUsername())) {
+//            jdbcUserDetailsManager.deleteUser(admin.getUsername());
+//        }
+//        jdbcUserDetailsManager.createUser(user);
+//        jdbcUserDetailsManager.createUser(admin);
+//        return jdbcUserDetailsManager;
+//    }
 }
