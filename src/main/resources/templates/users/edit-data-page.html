@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+</head>
+
+<body>
+<h2>Edit User</h2>
+<form th:action="@{/users/edit}" th:method="post" th:object="${editUser}">
+    <!--    если вместо field value &#45;&#45; создается новый юзер!!!!-->
+    <input type="hidden" name="id" th:field="${editUser.userId}"/>
+
+    <label>Name:</label>
+    <input type="text" name="name" th:field="${editUser.userName}"/>
+    <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+    <br/>
+
+    <label>Age:</label>
+
+    <input type="number" name="age" th:field="${editUser.userAge}"/>
+    <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
+    <br/>
+
+    <label>Email:</label>
+    <input type="email" name="email" th:field="${editUser.userEmail}"/>
+    <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
+    <br/>
+
+    <label>Sex:</label>
+    <input type="text" name="sex" th:field="${editUser.userSex}"/>
+    <input type="submit" value="Сохранить изменения"/>
+    <br/>
+</form>
+</body>
+</html>

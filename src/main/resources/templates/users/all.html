@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Добавлен мета-тег для адаптивности -->
+    <title>All Users</title>
+    <style>
+        table {
+            border-collapse: collapse; /* Убирает двойные границы в таблице */
+            width: 100%; /* Задаёт ширину таблицы */
+            margin: 20px 0; /* Добавляет отступы сверху и снизу */
+        }
+        th, td {
+            border: 1px solid #ddd; /* Добавляет границы ячеек */
+            padding: 8px; /* Добавляет внутренние отступы */
+            text-align: left; /* Выравнивание текста по левому краю */
+        }
+        th {
+            background-color: #f2f2f2; /* Цвет фона заголовков */
+        }
+        tr:hover {
+            background-color: #f5f5f5; /* Цвет фона при наведении на строку */
+        }
+    </style>
+</head>
+
+<body>
+<h2>All Users</h2>
+<br>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Sex</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userList}">
+        <td th:text="${user.userId}"></td>
+        <td th:text="${user.userName}"></td>
+        <td th:text="${user.userAge}"></td>
+        <td th:text="${user.userEmail}"></td>
+        <td th:text="${user.userSex}"></td>
+        <td>
+<!--                        <a th:href="@{/users/edit(id=${user.userId})}">Edit</a>-->
+
+<!--            если добавляю форму -- приложение выдает ошибку!!!!!!-->
+<!--            <form th:action="@{/users/edit(id=${user.userId})}" method="get" style="display:inline;">-->
+<!--                <button type="submit" style="padding: 10px 20px; font-size: 16px;" >Edit</button>-->
+<!--            </form>-->
+            <a th:href="@{/users/edit(id=${user.userId})}" style="padding: 10px 20px; font-size: 16px;">Edit</a>
+            <form th:action="@{/users/delete}" method="post" style="display:inline;">
+                <input type="hidden" th:name="id" th:value="${user.userId}">
+                <button type="submit" style="padding: 10px 20px; font-size: 16px;" >Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/users/add}" class="btn">Add new User</a>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"> &lt;!&ndash; Добавлен мета-тег для адаптивности &ndash;&gt;-->
+<!--    <title>All Users</title>-->
+<!--    <style>-->
+<!--        table {-->
+<!--            border-collapse: collapse; /* Убирает двойные границы в таблице */-->
+<!--            width: 100%; /* Задаёт ширину таблицы */-->
+<!--            margin: 20px 0; /* Добавляет отступы сверху и снизу */-->
+<!--        }-->
+<!--        th, td {-->
+<!--            border: 1px solid #ddd; /* Добавляет границы ячеек */-->
+<!--            padding: 8px; /* Добавляет внутренние отступы */-->
+<!--            text-align: left; /* Выравнивание текста по левому краю */-->
+<!--        }-->
+<!--        th {-->
+<!--            background-color: #f2f2f2; /* Цвет фона заголовков */-->
+<!--        }-->
+<!--        tr:hover {-->
+<!--            background-color: #f5f5f5; /* Цвет фона при наведении на строку */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<h2>All Users</h2>-->
+<!--<br>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Id</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Age</th>-->
+<!--        <th>Email</th>-->
+<!--        <th>Sex</th>-->
+<!--        <th>Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="user : ${userList}">-->
+<!--        <td th:text="${user.userId}"></td>-->
+<!--        <td th:text="${user.userName}"></td>-->
+<!--        <td th:text="${user.userAge}"></td>-->
+<!--        <td th:text="${user.userEmail}"></td>-->
+<!--        <td th:text="${user.userSex}"></td>-->
+<!--        <td>-->
+<!--            <a th:href="@{/users/edit(id=${user.userId})}">Edit</a>-->
+<!--            < (="@{/users/delete(id=${user.userId})}">Delete</a>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<br>-->
+<!--<a th:href="@{/users/add}" class="btn">Add new User</a>-->
+<!--</body>-->
+<!--</html>-->
