@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,13 @@ public class WebSecurityConfig {
 //    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
 //        this.successUserHandler = successUserHandler;
 //    }
+
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,20 +52,20 @@ public class WebSecurityConfig {
 
         return http.build();
     }
-//@Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setPasswordEncoder(passwordEncoder());
-//
-//        //authenticationProvider.setUserDetailsService();
-//
-//        return authenticationProvider;
-//    }
+@Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){ //если пользователь существует -- daoAuthenticationProvider помещает его в SpringSecurityContext
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder()); // назначили passwordEncoder из метода ниже
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+        authenticationProvider.setUserDetailsService(userService); // назначили setUserDetailsService чтобы предоставить юзера либо проверить его наличие
+
+        return authenticationProvider;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {

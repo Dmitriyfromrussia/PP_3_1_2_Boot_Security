@@ -1,22 +1,31 @@
-//package ru.kata.spring.boot_security.demo.models;
-//
-//import jakarta.persistence.Entity;
-//
-//import jakarta.persistence.Id;
-//import jakarta.persistence.Table;
-//import org.springframework.security.core.GrantedAuthority;
-//
-//@Entity
-//@Table
-//public class Role implements GrantedAuthority {
-//
-//    @Id
-//    private int id;
-//
-//    private String roleLabel
-//
-//    @Override
-//    public String getAuthority() {
-//        return "";
-//    }
-//}
+package ru.kata.spring.boot_security.demo.models;
+
+import jakarta.persistence.Entity;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+
+@Entity
+@Data
+@Getter
+@Setter
+@Table(name = "roles")
+public class Role implements GrantedAuthority {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String roleName;
+
+    @Override
+    public String getAuthority() {
+        return "";
+    }
+}
