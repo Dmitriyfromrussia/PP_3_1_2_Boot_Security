@@ -9,6 +9,6 @@ public class HelloController { // пишем в множественном чи�
 
     @GetMapping("/hello")
     public String presentation() {
-        return "hello-page";
+        return "hello";
     }
 }
