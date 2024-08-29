@@ -8,8 +8,8 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class InitMethod {
@@ -26,17 +26,18 @@ public class InitMethod {
     @Transactional
     public void init() {
 
-        Role userRole = new Role("USER");
-        Role adminRole = new Role("ADMIN");
 
-        Collection <Role> usersRoleList = new ArrayList<>();
+
+        Role userRole = new Role("USER");
+        Set<Role> usersRoleList = new HashSet<>();
         usersRoleList.add(userRole);
         User defaultUser = new User("user", 37, "user@mail.ru", "user", usersRoleList);
         userService.create(defaultUser);
 
-        Collection <Role> adminRoleList = new ArrayList<>();
+
+        Role adminRole = new Role("ADMIN");
+        Set <Role> adminRoleList = new HashSet<>();
         adminRoleList.add(adminRole);
-        adminRoleList.add(userRole);
         User defaultAdmin = new User("admin", 38, "admin@mail.ru", "admin", adminRoleList);
         userService.create(defaultAdmin);
     }

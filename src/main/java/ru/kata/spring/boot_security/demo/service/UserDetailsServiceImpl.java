@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 
 import ru.kata.spring.boot_security.demo.models.User;
@@ -34,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService { // его з
     }
 
     @Override
-    //@Transactional // достаем Юзера а список ролей является коллекцией а коллекция One-To-Many не грузится в режиме Eager, там Lazy стоит надо сделать транзакцию
+    @Transactional(readOnly = true) // достаем Юзера а список ролей является коллекцией а коллекция One-To-Many не грузится в режиме Eager, там Lazy стоит надо сделать транзакцию
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // можно посмотреть в документации UserDetails и вспомнить какие данные ему надо
         User foundUser = findByUsername(username);
         if (foundUser == null) {

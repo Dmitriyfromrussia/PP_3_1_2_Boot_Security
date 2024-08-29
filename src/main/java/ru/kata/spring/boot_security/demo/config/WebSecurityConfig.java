@@ -6,26 +6,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-//    private final SuccessUserHandler successUserHandler;
-//
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
+    private SuccessUserHandler successUserHandler;
+    private UserDetailsService userDetailsService;
 
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
 
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -39,8 +37,8 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
 
-                        //.loginPage("/login")
-                        //.successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
+                        .loginPage("/login")
+                        .successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());// .logout(LogoutConfigurer::permitAll
@@ -50,15 +48,15 @@ public class WebSecurityConfig {
 @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){ //если пользователь существует -- daoAuthenticationProvider помещает его в SpringSecurityContext
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder()); // назначили passwordEncoder из метода ниже
+        authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder()); // назначили passwordEncoder из метода ниже
 
-        authenticationProvider.setUserDetailsService(userDetailsServiceImpl); // назначили setUserDetailsService чтобы предоставить юзера либо проверить его наличие
+        authenticationProvider.setUserDetailsService(userDetailsService); // назначили setUserDetailsService чтобы предоставить юзера либо проверить его наличие
 
         return authenticationProvider;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

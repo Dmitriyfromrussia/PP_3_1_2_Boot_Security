@@ -22,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -54,18 +55,20 @@ public class User implements UserDetails { // UserDetails стандартизи
     @Column(name = "password")
     private String password;
 
+    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+            //cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
 
     public User() {
     }
 
-    public User(Long userId, String username, int userAge, String userEmail, String password, Collection<Role> roles) {
+    public User(Long userId, String username, int userAge, String userEmail, String password, Set<Role> roles) {
         this.userId = userId;
         this.username = username;
         this.userAge = userAge;
@@ -74,7 +77,7 @@ public class User implements UserDetails { // UserDetails стандартизи
         this.roles = roles;
     }
 
-    public User(String username, int userAge, String userEmail, String password, Collection<Role> roles) {
+    public User(String username, int userAge, String userEmail, String password, Set<Role> roles) {
         this.username = username;
         this.userAge = userAge;
         this.userEmail = userEmail;
