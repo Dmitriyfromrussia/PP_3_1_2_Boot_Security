@@ -37,8 +37,8 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/index").permitAll() // доступно всем
-                        .requestMatchers("/admin/**").hasRole("admin") // доступ к /admin только для пользователей с ролью admin
-                        .requestMatchers("/user").hasAnyRole("user", "admin") // доступ к /user для ролей user и admin
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // доступ к /admin только для пользователей с ролью admin
+                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // доступ к /user для ролей user и admin
                         .anyRequest().authenticated() // все остальные запросы требуют аутентификации
                 )
                 .formLogin((form) -> form
@@ -51,8 +51,9 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){ //если пользователь существует -- daoAuthenticationProvider помещает его в SpringSecurityContext
+    public DaoAuthenticationProvider daoAuthenticationProvider() { //если пользователь существует -- daoAuthenticationProvider помещает его в SpringSecurityContext
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder()); // назначили passwordEncoder из метода ниже
 
@@ -65,6 +66,7 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+}
 
 //    @Bean
 //    public UserDetailsService userDetailsService() {
@@ -109,4 +111,3 @@ public class WebSecurityConfig {
 //        jdbcUserDetailsManager.createUser(admin);
 //        return jdbcUserDetailsManager;
 //    }
-}

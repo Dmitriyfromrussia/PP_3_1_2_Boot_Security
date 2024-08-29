@@ -28,14 +28,14 @@ public class InitMethod {
 
 
 
-        Role userRole = new Role("USER");
+        Role userRole = new Role("ROLE_USER");
         Set<Role> usersRoleList = new HashSet<>();
         usersRoleList.add(userRole);
         User defaultUser = new User("user", 37, "user@mail.ru", "user", usersRoleList);
         userService.create(defaultUser);
 
 
-        Role adminRole = new Role("ADMIN");
+        Role adminRole = new Role("ROLE_ADMIN");
         Set <Role> adminRoleList = new HashSet<>();
         adminRoleList.add(adminRole);
         User defaultAdmin = new User("admin", 38, "admin@mail.ru", "admin", adminRoleList);
