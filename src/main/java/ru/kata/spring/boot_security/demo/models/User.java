@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,10 +28,10 @@ import java.util.Collection;
 @Data
 @Getter
 @Setter
-public class  User implements UserDetails {
+public class  User implements UserDetails { // UserDetails стандартизированный интерфейс
 
-    @Getter
-    @Setter
+    //@Getter
+    //@Setter
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +48,16 @@ public class  User implements UserDetails {
     private int userAge;
 
     @Column(name = "email")
-    @Email
+    @Email(message = "введите корректный email")
     private String userEmail;
 
     @Column(name = "password")
     private String password;
 
-@ManyToMany
+@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 @JoinTable(name = "users_roles",
-joinColumns = @JoinColumn(name = "user_id"),
-inverseJoinColumns = @JoinColumn(name = "role_id"))
+joinColumns = @JoinColumn(name = "users_id"),
+inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Collection<Role> roles;
 
 
