@@ -26,9 +26,9 @@ import java.util.Collection;
 @Entity
 @Table(name = "users")
 @Data
-@Getter
-@Setter
-public class  User implements UserDetails { // UserDetails стандартизированный интерфейс
+@Getter // убрать
+@Setter // убрать
+public class User implements UserDetails { // UserDetails стандартизированный интерфейс
 
     //@Getter
     //@Setter
@@ -54,43 +54,32 @@ public class  User implements UserDetails { // UserDetails стандартиз�
     @Column(name = "password")
     private String password;
 
-@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-@JoinTable(name = "users_roles",
-joinColumns = @JoinColumn(name = "users_id"),
-inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Collection<Role> roles;
-
 
 
     public User() {
     }
 
-    public User(String username, int userAge, String userEmail, String password) {
-        this.username = username;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
-        this.password = password;
-    }
-
-    public User(Long userId, String username, int userAge, String userEmail, String password) {
+    public User(Long userId, String username, int userAge, String userEmail, String password, Collection<Role> roles) {
         this.userId = userId;
         this.username = username;
         this.userAge = userAge;
         this.userEmail = userEmail;
         this.password = password;
+        this.roles = roles;
     }
 
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("userId=").append(userId);
-        sb.append(", userName='").append(username).append('\'');
-        sb.append(", userAge=").append(userAge);
-        sb.append(", userEmail='").append(userEmail).append('\'');
-        sb.append(", userSex='").append(password).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public User(String username, int userAge, String userEmail, String password, Collection<Role> roles) {
+        this.username = username;
+        this.userAge = userAge;
+        this.userEmail = userEmail;
+        this.password = password;
+        this.roles = roles;
     }
 
     @Override
@@ -115,7 +104,7 @@ inverseJoinColumns = @JoinColumn(name = "roles_id"))
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return roles; //было getRoles() убрал на всякий из-за Lombook
     }
 
     @Override
@@ -128,4 +117,16 @@ inverseJoinColumns = @JoinColumn(name = "roles_id"))
         return username;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("password='").append(password).append('\'');
+        sb.append(", userId=").append(userId);
+        sb.append(", username='").append(username).append('\'');
+        sb.append(", userAge=").append(userAge);
+        sb.append(", userEmail='").append(userEmail).append('\'');
+        sb.append(", roles=").append(roles);
+        sb.append('}');
+        return sb.toString();
+    }
 }
