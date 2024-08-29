@@ -19,11 +19,11 @@ import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-//    private final SuccessUserHandler successUserHandler;
-//
-//    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
-//        this.successUserHandler = successUserHandler;
-//    }
+    private final SuccessUserHandler successUserHandler;
+
+    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+        this.successUserHandler = successUserHandler;
+    }
 
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -43,8 +43,8 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
 
-                        //.loginPage("/login")
-                        //.successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
+                        .loginPage("/login")
+                        .successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());// .logout(LogoutConfigurer::permitAll
