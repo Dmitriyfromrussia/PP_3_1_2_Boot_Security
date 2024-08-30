@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <script type="text/javascript">
+        const toggleCheckboxes = (checkbox) => {
+            const checkboxes = document.querySelectorAll("#roleAdmin, #roleUser");
+
+            checkboxes.forEach(cb => {
+                if (cb !== checkbox) cb.checked = false;
+            });
+        };
+    </script>
+</head>
+
+<body>
+<h2>Edit User</h2>
+<form th:action="@{/users/edit}" th:method="post" th:object="${userForEdit}">
+
+    <label>ID</label>
+    <input type="hidden" name="id" th:field="${userForEdit.userId}"/>
+
+    <label>Name:</label>
+    <input type="text" name="name" th:field="${userForEdit.username}"/>
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+    <br/>
+
+    <label>Age:</label>
+    <input type="number" name="age" th:field="${userForEdit.userAge}"/>
+    <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
+    <br/>
+
+    <label>Email:</label>
+    <input type="email" name="email" th:field="${userForEdit.userEmail}"/>
+    <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
+    <br/>
+
+    <label>Password:</label>
+    <input type="text" name="sex" th:field="${userForEdit.password}"/>
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+
+    <br/>
+
+    <div>
+        <label>Roles:</label>
+        <ul>
+            <li th:each="role : ${allRoles}">
+                <input type="checkbox" name="roles" th:value="${role.id}"
+                       th:checked="${#lists.contains(userForEdit.roles, role)}"/>
+                <span th:text="${role.roleName}"></span>
+            </li>
+        </ul>
+    </div>
+    <br/>
+    <input type="submit" value="Сохранить изменения"/>
+
+</form>
+</body>
+</html>

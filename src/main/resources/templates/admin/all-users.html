@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Добавлен мета-тег для адаптивности -->
+    <title>All Users</title>
+    <style>
+        /* Общий стиль для body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5; /* Цвет фона */
+            display: flex;
+            justify-content: center; /* Центровка по горизонтали */
+            align-items: center; /* Центровка по вертикали */
+            height: 100vh; /* Высота экрана */
+            margin: 0;
+        }
+
+        /* Стиль для контейнера */
+        .user-container {
+            background-color: white; /* Цвет фона формы */
+            padding: 30px;
+            border-radius: 10px; /* Скругленные углы */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+            width: 80%; /* Ширина формы */
+            max-width: 1200px; /* Максимальная ширина */
+        }
+
+        /* Стиль для заголовка формы */
+        .user-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Стиль для таблицы */
+        table {
+            border-collapse: collapse; /* Убирает двойные границы в таблице */
+            width: 100%; /* Задаёт ширину таблицы */
+            margin: 20px 0; /* Добавляет отступы сверху и снизу */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Добавляет границы ячеек */
+            padding: 10px; /* Добавляет внутренние отступы */
+            text-align: left; /* Выравнивание текста по левому краю */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Цвет фона заголовков */
+        }
+
+        tr:hover {
+            background-color: #f5f5f5; /* Цвет фона при наведении на строку */
+        }
+
+        /* Стиль для кнопок */
+        .user-container input[type="submit"],
+        .user-container a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50; /* Зеленый цвет */
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .user-container input[type="submit"]:hover,
+        .user-container a:hover {
+            background-color: #45a049; /* Темнее зеленый при наведении */
+        }
+
+        /* Отступы для форм */
+        form {
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="user-container">
+    <h2>All Users</h2>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Password</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.userAge}"></td>
+            <td th:text="${user.userEmail}"></td>
+            <td><span th:each="role : ${user.authorities}" th:text="${role.getAuthority()} + ' '"></span></td>
+            <td>
+                <a th:href="@{/admin/edit(id=${user.userId})}" style="background-color: #4CAF50; padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px;">Edit</a>
+                <form th:action="@{/users/delete}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="id" th:value="${user.userId}">
+                    <input type="submit" value="Delete" style="background-color: #f44336;"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <form th:action="@{/users/add}" method="get">
+        <input type="submit" value="Add new user"/>
+    </form>
+    <br>
+    <form th:action="@{/logout}" method="get">
+        <input type="submit" value="Logout"/>
+    </form>
+    <br>
+</div>
+</body>
+</html>
+
+<!-- моя страница до косметики-->
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"> &lt;!&ndash; Добавлен мета-тег для адаптивности &ndash;&gt;-->
+<!--    <title>All Users</title>-->
+<!--    <style>-->
+<!--        table {-->
+<!--            border-collapse: collapse; /* Убирает двойные границы в таблице */-->
+<!--            width: 100%; /* Задаёт ширину таблицы */-->
+<!--            margin: 20px 0; /* Добавляет отступы сверху и снизу */-->
+<!--        }-->
+
+<!--        th, td {-->
+<!--            border: 1px solid #ddd; /* Добавляет границы ячеек */-->
+<!--            padding: 8px; /* Добавляет внутренние отступы */-->
+<!--            text-align: left; /* Выравнивание текста по левому краю */-->
+<!--        }-->
+
+<!--        th {-->
+<!--            background-color: #f2f2f2; /* Цвет фона заголовков */-->
+<!--        }-->
+
+<!--        tr:hover {-->
+<!--            background-color: #f5f5f5; /* Цвет фона при наведении на строку */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<h2>All Users</h2>-->
+<!--<br>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Id</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Password</th>-->
+<!--        <th>Age</th>-->
+<!--        <th>Email</th>-->
+<!--        <th>Roles</th>-->
+<!--        <th>Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="user : ${userList}">-->
+<!--        <td th:text="${user.userId}"></td>-->
+<!--        <td th:text="${user.username}"></td>-->
+<!--        <td th:text="${user.password}"></td>-->
+<!--        <td th:text="${user.userAge}"></td>-->
+<!--        <td th:text="${user.userEmail}"></td>-->
+
+<!--        <td><span th:each="role : ${user.authorities}" th:text="${role.getAuthority()} + ' '"></span></td>-->
+<!--        <td>-->
+<!--            <a th:href="@{/admin/edit(id=${user.userId})}" style="padding: 10px 20px; font-size: 16px;">Edit</a>-->
+<!--            <form th:action="@{/users/delete}" method="post" style="display:inline;">-->
+<!--                <input type="hidden" th:name="id" th:value="${user.userId}">-->
+<!--                <button type="submit" style="padding: 10px 20px; font-size: 16px;">Delete</button>-->
+<!--            </form>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<br>-->
+<!--<form th:action="@{/users/add}" method="get">-->
+<!--    <input type="submit" value="Add new user"/>-->
+<!--</form>-->
+<!--<br>-->
+<!--<form th:action="@{/logout}" method="get">-->
+<!--    <input type="submit" value="Logout"/></form>-->
+<!--<br>-->
+<!--</body>-->
+<!--</html>-->

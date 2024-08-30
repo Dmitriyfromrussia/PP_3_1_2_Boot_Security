@@ -6,12 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
@@ -32,13 +27,15 @@ public class WebSecurityConfig {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/index").permitAll() // доступно всем
                         .requestMatchers("/admin/**").hasRole("ADMIN") // доступ к /admin только для пользователей с ролью admin
-                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // доступ к /user для ролей user и admin
+                        //.requestMatchers("/user").hasAnyRole("USER", "ADMIN") // доступ к /user для ролей user и admin
+                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated() // все остальные запросы требуют аутентификации
                 )
                 .formLogin((form) -> form
@@ -47,10 +44,32 @@ public class WebSecurityConfig {
                         .successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());// .logout(LogoutConfigurer::permitAll
+                .logout((logout) -> logout.permitAll()
+                        .logoutUrl("/logout")
+                        );// .logout(LogoutConfigurer::permitAll
 
         return http.build();
     }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((requests) -> requests
+//                        .requestMatchers("/", "/index").permitAll() // доступно всем
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") // доступ к /admin только для пользователей с ролью admin
+//                        //.requestMatchers("/user").hasAnyRole("USER", "ADMIN") // доступ к /user для ролей user и admin
+//                        .requestMatchers("/user").hasRole("USER")
+//                        .anyRequest().authenticated() // все остальные запросы требуют аутентификации
+//                )
+//                .formLogin((form) -> form
+//
+//                        .loginPage("/login")
+//                        .successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
+//                        .permitAll()
+//                )
+//                .logout((logout) -> logout.permitAll());// .logout(LogoutConfigurer::permitAll
+//
+//        return http.build();
+//    }
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() { //если пользователь существует -- daoAuthenticationProvider помещает его в SpringSecurityContext

@@ -31,8 +31,6 @@ import java.util.Set;
 @Setter // убрать
 public class User implements UserDetails { // UserDetails стандартизированный интерфейс
 
-    //@Getter
-    //@Setter
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +53,6 @@ public class User implements UserDetails { // UserDetails стандартизи
     @Column(name = "password")
     private String password;
 
-    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
             //cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -107,7 +104,7 @@ public class User implements UserDetails { // UserDetails стандартизи
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles; //было getRoles() убрал на всякий из-за Lombook
+        return roles;
     }
 
     @Override
