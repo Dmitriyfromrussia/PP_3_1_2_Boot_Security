@@ -55,18 +55,4 @@ public class UserDetailsServiceImpl implements UserDetailsService { // его з
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
     }
 }
-//            @Override
-//            public Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-//                return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
-//            }
-//
-//            @Override
-//            public String getPassword() {
-//                return user.getPassword();
-//            }
-//
-//            @Override
-//            public String getUsername() {
-//                return user.getUserName();
-//            }
-//        };
+

@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.CustomExeptions.UsernameAlreadyExistsException;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,12 +25,27 @@ public class UserServiceImpl implements UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    @Override
-    @Transactional
-    public void create(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
+//    @Override
+//    @Transactional
+//    public void create(User user) {
+//        if(userRepository.findByUsername(user.getUsername()).isEnabled()) {
+//            throw new U
+//        };
+//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//        userRepository.save(user);
+
+        @Override
+        @Transactional
+        public void create(User user) {
+            User existingUser = userRepository.findByUsername(user.getUsername());
+
+            if (existingUser != null && existingUser.isEnabled()) {
+                throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует .");
+            }
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
+
 
     @Override
     @Transactional

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
@@ -14,17 +13,17 @@
         };
     </script>
 </head>
-
 <body>
 <h2>Edit User</h2>
-<form th:action="@{/users/edit}" th:method="post" th:object="${userForEdit}">
+<form th:action="@{/admin/edit}" th:method="post" th:object="${userForEdit}">
 
     <label>ID</label>
-    <input type="hidden" name="id" th:field="${userForEdit.userId}"/>
-
+    <!--    <input type="hidden" name="id" th:field="${userForEdit.userId}"/>-->
+    <input type="text" readonly="readonly" id="id" th:field="${userForEdit.userId}"/>
+    <br/>
     <label>Name:</label>
     <input type="text" name="name" th:field="${userForEdit.username}"/>
-    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{getUsername()}"></span>
     <br/>
 
     <label>Age:</label>
@@ -38,7 +37,7 @@
     <br/>
 
     <label>Password:</label>
-    <input type="text" name="sex" th:field="${userForEdit.password}"/>
+    <input type="text" name="password" th:field="${userForEdit.password}"/>
     <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 
     <br/>

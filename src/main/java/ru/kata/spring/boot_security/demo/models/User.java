@@ -43,7 +43,7 @@ public class User implements UserDetails { // UserDetails стандартизи
     private String username;
 
     @Column(name = "age")
-    @Min(value = 1, message = "Возраст должен быть больше 1")
+    @Min(value = 18, message = "Возраст должен быть больше 18")
     private int userAge;
 
     @Column(name = "email")

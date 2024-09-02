@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,11 +23,11 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private UserService userService;
+    private UserServiceImpl userService;
     private RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserServiceImpl userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -53,9 +54,27 @@ public class AdminController {
     public String updateUser(@ModelAttribute("userForEdit") @Valid User editUser,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "users/edit-data-page"; // Вернуть на страницу редактирования, если есть ошибки
+            return "admin/edit-user"; // Вернуть на страницу редактирования, если есть ошибки
         }
         userService.update(editUser);
-        return "redirect:admin/all-users";
+        return "redirect:/admin/all-users";
     }
+
+    @PostMapping("/delete")
+    public String deleteUser(@RequestParam("id") long id) {
+        User user = userService.getById(id);
+        user.setRoles(new HashSet<>());
+        userService.delete(id);
+        return "redirect:/admin/all-users";
+    }
+
+    @GetMapping("/add")
+    public String addUserForm(Model model) {
+        User emptyUser = new User();
+        model.addAttribute("emptyUser", emptyUser);
+        return "admin/add-user";
+    }
+
+    @PostMapping("/add")
+    public String addUser (@RequestParam )
 }
