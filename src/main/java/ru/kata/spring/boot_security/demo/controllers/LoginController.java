@@ -21,6 +21,10 @@ public class LoginController {
     public String login() {
         return "login";
     }
+    @GetMapping("/hello")
+    public String hellopage(){
+        return "/hellopage";
+    }
 
 
 

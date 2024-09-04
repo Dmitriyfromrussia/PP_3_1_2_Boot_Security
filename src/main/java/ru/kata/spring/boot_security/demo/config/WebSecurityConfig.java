@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
 @Configuration
@@ -32,7 +33,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/index").permitAll() // доступно всем
+                        .requestMatchers("/", "/hello").permitAll() // доступно всем
                         .requestMatchers("/admin/**").hasRole("ADMIN") // доступ к /admin только для пользователей с ролью admin
                         //.requestMatchers("/user").hasAnyRole("USER", "ADMIN") // доступ к /user для ролей user и admin
                         .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
@@ -45,8 +46,10 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll()
-                        .logoutUrl("/logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/", "GET"))
+                                //logoutUrl("/logout")
                         );// .logout(LogoutConfigurer::permitAll
+        //logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"));
 
         return http.build();
     }

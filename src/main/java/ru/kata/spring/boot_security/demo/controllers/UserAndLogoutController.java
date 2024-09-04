@@ -1,11 +1,13 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -29,8 +31,15 @@ public class UserAndLogoutController {
     }
 
     @GetMapping("/logout")
-    public String logoutPage() {
-        return "You have been successfully logged out." + "<br>" +
-                "<a href='/login'>login</a>";
+    public String logoutPage(Principal principal, HttpServletResponse response) throws IOException {
+        if (principal.getName().contains("admin")) {
+            return principal.getName() + ", you have been successfully logged out." + "<br>" +
+                    "<a href='/login'>login</a>" + " or back to " + "<a href='/hello'> hello page </a>";
+        }
+        if (principal.getName().contains("user")) {
+             response.sendRedirect("/login?logout");
+             return null;
+            //return "redirect:/login";
+        } else return "check logoutPage controller";
     }
 }
