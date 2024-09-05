@@ -11,15 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,7 +24,8 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints=
+@UniqueConstraint(columnNames={"name"}))
 @Data
 //@Getter // убрать
 //@Setter // убрать
@@ -39,7 +37,7 @@ public class User implements UserDetails { // UserDetails стандартизи
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    //имя юзера олжно быть уникально (аннотация @Uniq или первичный ключ)
+    //имя юзера должно быть уникально (аннотация @Uniq или первичный ключ)
     @Column(name = "name")
     @NotBlank(message = "Имя не может быть пустым")
     @Size(min = 2, max = 15, message = "Имя должно быть между 2 и 15 символами в длину")
@@ -67,16 +65,16 @@ public class User implements UserDetails { // UserDetails стандартизи
 
     public User() {
     }
-
-    public User(Long userId, String username, int userAge, String userEmail, String password, Set<Role> roles) {
-        this.userId = userId;
-        this.username = username;
-        this.userAge = userAge;
-        this.userEmail = userEmail;
-        this.password = password;
-        this.roles = roles;
-    }
-
+//
+//    public User(Long userId, String username, int userAge, String userEmail, String password, Set<Role> roles) {
+//        this.userId = userId;
+//        this.username = username;
+//        this.userAge = userAge;
+//        this.userEmail = userEmail;
+//        this.password = password;
+//        this.roles = roles;
+//    }
+//
     public User(String username, int userAge, String userEmail, String password, Set<Role> roles) {
         this.username = username;
         this.userAge = userAge;
