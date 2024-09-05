@@ -18,6 +18,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,8 +29,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-@Getter // убрать
-@Setter // убрать
+//@Getter // убрать
+//@Setter // убрать
+//@ToString(exclude = "roles") //// Исключаем roles, чтобы избежать рекурсии
 public class User implements UserDetails { // UserDetails стандартизированный интерфейс
 
     @Id

@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "roles")
+@ToString
 public class Role implements GrantedAuthority { // GrantedAuthority стандартизированный интерфейс
 
     @Id

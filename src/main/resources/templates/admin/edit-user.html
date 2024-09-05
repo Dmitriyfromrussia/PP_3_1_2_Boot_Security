@@ -113,26 +113,27 @@
     <form th:action="@{/admin/edit}" th:method="post" th:object="${userForEdit}">
 
         <label>ID</label>
-        <input type="text" readonly="readonly" id="id" th:field="${userForEdit.userId}"/>
+        <input type="text" readonly="readonly" th:field="*{userId}"/>
         <br/>
+
         <label>Name:</label>
-        <input type="text" name="name" th:field="${userForEdit.username}"/>
+        <input type="text" th:field="*{username}"/>
         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
         <br/>
 
-        <label>Age:</label>
-        <input type="number" name="age" th:field="${userForEdit.userAge}"/>
+        <label for="age">Age:</label>
+        <input type="number" th:field="*{userAge}" id="age"/>
         <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
         <br/>
 
-        <label>Email:</label>
-        <input type="email" name="email" th:field="${userForEdit.userEmail}"/>
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{userEmail}" id="email"/>
         <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
         <br/>
 
-        <label>Password:</label>
-        <input type="text" name="password" th:field="${userForEdit.password}"/>
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <label for="pass">Password:</label>
+        <input type="text" th:field="*{password}"/>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" id="pass"></span>
         <br/>
 
         <div>
