@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add New User</title>
+</head>
+
+<body>
+<h2>Add New User</h2>
+<form th:method="post" th:action="@{/users/add}" th:object="${newUser}">
+    <label for="name">Name:</label>
+    <input type="text" th:field="*{userName}" id="name"  placeholder="обязательное значение" required/>
+    <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+    <br/>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" th:field="*{userAge}" required/>
+    <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
+    <br/>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{userEmail}" required/>
+    <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
+    <br/>
+
+<!--    Это поле пока не параметризировано аннотацией @Value, поэтому не добавляю проверку. Пока Юзер может выбрать Любой пол -->
+    <label for="sex">Sex:</label>
+    <input type="text" id="sex" th:field="*{userSex}" required/><br/>
+
+    <input type="submit" value="Добавить пользователя"/>
+</form>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Add New User</title>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<h2>Add New User</h2>-->
+<!--<form action="/users/add" method="post">-->
+<!--    <label for="name">Name:</label>-->
+<!--    <input type="text" id="name" name="name" placeholder="обязательное значение" required/><br/>-->
+
+<!--    <label for="age">Age:</label>-->
+<!--    <input type="number" id="age" name="age" required/><br/>-->
+
+<!--    <label for="email">Email:</label>-->
+<!--    <input type="email" id="email" name="email" required/><br/>-->
+
+<!--    <label for="sex">Sex:</label>-->
+<!--    <input type="text" id="sex" name="sex" required/><br/>-->
+
+<!--    <input type="submit" value="Добавить пользователя"/>-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

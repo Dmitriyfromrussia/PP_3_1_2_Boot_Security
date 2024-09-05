@@ -70,11 +70,19 @@ public class AdminController {
 
     @GetMapping("/add")
     public String addUserForm(Model model) {
-        User emptyUser = new User();
-        model.addAttribute("emptyUser", emptyUser);
+        User user = new User();
+        model.addAttribute("emptyUser", user);
         return "admin/add-user";
     }
 
-//    @PostMapping("/add")
-//    public String addUser (@RequestParam )
+    @PostMapping("/add")
+    public String addUser(@ModelAttribute("emptyUser") @Valid User userForAdd,
+                          BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "admin/add-user";
+        } else {
+            userService.create(userForAdd);
+            return "redirect:/admin/all-users";
+        }
+    }
 }
