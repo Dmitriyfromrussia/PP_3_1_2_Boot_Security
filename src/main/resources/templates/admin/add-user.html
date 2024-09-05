@@ -2,59 +2,185 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit User</title>
-    <script type="text/javascript">
-        const toggleCheckboxes = (checkbox) => {
-            const checkboxes = document.querySelectorAll("#roleAdmin, #roleUser");
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Добавлен мета-тег для адаптивности -->
+    <title>Add User</title>
+    <style>
+        /* Общий стиль для body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5; /* Цвет фона */
+            display: flex;
+            justify-content: center; /* Центровка по горизонтали */
+            align-items: center; /* Центровка по вертикали */
+            height: 100vh; /* Высота экрана */
+            margin: 0;
+        }
 
-            checkboxes.forEach(cb => {
-                if (cb !== checkbox) cb.checked = false;
-            });
-        };
-    </script>
+        /* Стиль для контейнера */
+        .form-container {
+            background-color: white; /* Цвет фона формы */
+            padding: 30px;
+            border-radius: 10px; /* Скругленные углы */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+            width: 80%; /* Ширина формы */
+            max-width: 600px; /* Максимальная ширина */
+        }
+
+        /* Стиль для заголовка формы */
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Стиль для форм */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .form-container input[type="submit"] {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50; /* Зеленый цвет */
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049; /* Темнее зеленый при наведении */
+        }
+
+        .form-container span {
+            color: red; /* Цвет текста ошибок */
+        }
+
+        ul {
+            list-style-type: none; /* Убирает маркеры списка */
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-<h2>Edit User</h2>
-<form th:action="@{/admin/add}" th:method="post" th:object="${emptyUser}">
+<div class="form-container">
+    <h2>Add User</h2>
+    <form th:action="@{/admin/add}" th:method="post" th:object="${emptyUser}">
 
-    <label for="id">ID</label>
-    <!--    <input type="hidden" name="id" th:field="${userForEdit.userId}"/>-->
-    <input type="text" readonly="readonly" id="id" th:field="${emptyUser.userId}"/>
-    <br/>
-    <label for="namee">Name:</label>
-    <input type="text" name="name" id="namee" th:field="${emptyUser.username}"/>
-    <span th:if="${#fields.hasErrors('username')}" th:errors="*{getUsername()}"></span>
-    <br/>
+        <label for="id">ID</label>
+        <input type="text" readonly="readonly" id="id" th:field="${emptyUser.userId}"/>
+        <br/>
+        <label for="namee">Name:</label>
+        <input type="text" name="name" id="namee" th:field="${emptyUser.username}"/>
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        <br/>
 
-    <label for="age">Age:</label>
-    <input type="number" name="age" id="age" th:field="${emptyUser.userAge}"/>
-    <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
-    <br/>
+        <label for="age">Age:</label>
+        <input type="number" name="age" id="age" th:field="${emptyUser.userAge}"/>
+        <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>
+        <br/>
 
-    <label for="mail">Email:</label>
-    <input type="email" name="email" id="mail" th:field="${emptyUser.userEmail}"/>
-    <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
-    <br/>
+        <label for="mail">Email:</label>
+        <input type="email" name="email" id="mail" th:field="${emptyUser.userEmail}"/>
+        <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>
+        <br/>
 
-    <label for="pass">Password:</label>
-    <input type="text" name="password" id="pass" th:field="${emptyUser.password}"/>
-    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <label for="pass">Password:</label>
+        <input type="text" name="password" id="pass" th:field="${emptyUser.password}"/>
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <br/>
 
-    <br/>
+        <div>
+            <label>Roles:</label>
+            <ul>
+                <li th:each="role : ${allRoles}">
+                    <input type="checkbox" name="roles" th:value="${role.id}"
+                           th:checked="${emptyUser.roles != null && #lists.contains(emptyUser.roles, role)}"/>
+                    <span th:text="${role.roleName}"></span>
+                </li>
+            </ul>
+        </div>
+        <br/>
+        <input type="submit" value="Сохранить изменения"/>
 
-    <div>
-        <label>Roles:</label>
-        <ul>
-            <li th:each="role : ${allRoles}">
-                <input type="checkbox" name="roles" th:value="${role.id}"
-                       th:checked="${#lists.contains(emptyUser.roles, role)}"/>
-                <span th:text="${role.roleName}"></span>
-            </li>
-        </ul>
-    </div>
-    <br/>
-    <input type="submit" value="Сохранить изменения"/>
-
-</form>
+    </form>
+</div>
 </body>
 </html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Edit User</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>Add User</h2>-->
+<!--<form th:action="@{/admin/add}" th:method="post" th:object="${emptyUser}">-->
+
+<!--    <label for="id">ID</label>-->
+<!--    <input type="text" readonly="readonly" id="id" th:field="${emptyUser.userId}"/>-->
+<!--    <br/>-->
+<!--    <label for="namee">Name:</label>-->
+<!--    <input type="text" name="name" id="namee" th:field="${emptyUser.username}"/>-->
+<!--    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>-->
+<!--    <br/>-->
+
+<!--    <label for="age">Age:</label>-->
+<!--    <input type="number" name="age" id="age" th:field="${emptyUser.userAge}"/>-->
+<!--    <span th:if="${#fields.hasErrors('userAge')}" th:errors="*{userAge}"></span>-->
+<!--    <br/>-->
+
+<!--    <label for="mail">Email:</label>-->
+<!--    <input type="email" name="email" id="mail" th:field="${emptyUser.userEmail}"/>-->
+<!--    <span th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></span>-->
+<!--    <br/>-->
+
+<!--    <label for="pass">Password:</label>-->
+<!--    <input type="text" name="password" id="pass" th:field="${emptyUser.password}"/>-->
+<!--    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
+<!--    <br/>-->
+
+<!--    <div>-->
+<!--        <label>Roles:</label>-->
+<!--        <ul>-->
+<!--            <li th:each="role : ${allRoles}">-->
+<!--                <input type="checkbox" name="roles" th:value="${role.id}"-->
+<!--                       th:checked="${emptyUser.roles != null && #lists.contains(emptyUser.roles, role)}"/>-->
+<!--                <span th:text="${role.roleName}"></span>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--    <input type="submit" value="Сохранить изменения"/>-->
+
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

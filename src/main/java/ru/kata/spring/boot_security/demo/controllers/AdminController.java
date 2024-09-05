@@ -50,12 +50,23 @@ public class AdminController {
         return "admin/edit-user";
     }
 
+    //    @PostMapping("/edit")
+//    public String updateUser(@ModelAttribute("userForEdit") @Valid User editUser,
+//                             BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return "admin/edit-user"; // Вернуть на страницу редактирования, если есть ошибки
+//        }
+//        userService.update(editUser);
+//        return "redirect:/admin/all-users";
+//    }
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute("userForEdit") @Valid User editUser,
-                             BindingResult bindingResult) {
+                             BindingResult bindingResult,
+                             @RequestParam(value = "roles", required = false) Set<Role> roles) {
         if (bindingResult.hasErrors()) {
-            return "admin/edit-user"; // Вернуть на страницу редактирования, если есть ошибки
+            return "admin/edit-user";
         }
+        editUser.setRoles(roles);
         userService.update(editUser);
         return "redirect:/admin/all-users";
     }
@@ -72,15 +83,20 @@ public class AdminController {
     public String addUserForm(Model model) {
         User user = new User();
         model.addAttribute("emptyUser", user);
+
+        Set<Role> allRoles = roleService.findAllRoles();
+        model.addAttribute("allRoles", allRoles);
         return "admin/add-user";
     }
 
     @PostMapping("/add")
     public String addUser(@ModelAttribute("emptyUser") @Valid User userForAdd,
-                          BindingResult bindingResult) {
+                          BindingResult bindingResult,
+                          @RequestParam(value = "roles", required = false) Set<Role> roles) {
         if (bindingResult.hasErrors()) {
             return "admin/add-user";
         } else {
+            userForAdd.setRoles(roles);
             userService.create(userForAdd);
             return "redirect:/admin/all-users";
         }
