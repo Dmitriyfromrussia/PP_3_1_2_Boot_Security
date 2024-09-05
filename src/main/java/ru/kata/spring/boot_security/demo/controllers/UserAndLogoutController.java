@@ -24,22 +24,41 @@ public class UserAndLogoutController {
     public String pageForAuthenticatedUsers(Principal principal) { //principal это не Юзер
         //Authentication a = SecurityContextHolder.getContext().getAuthentication(); // второй вариант вытащить principal не передавая в параметры
         User user = userDetailsServiceImpl.findByUsername(principal.getName());
-        return "You entered to secured part of web service<br> your name is: " + user.getUsername() + "<br>" +
+        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
+                "You entered to secured part of web service<br> your name is: " + user.getUsername() + "<br>" +
                 "your email: " + user.getUserEmail() + "<br>" +
                 "your age: " + user.getUserAge() + "<br>" +
-                "<a href='/logout'>Logout</a>";
+                "<a href='/logout'>Logout</a>" + "</div>";
     }
 
-    @GetMapping("/logout")
-    public String logoutPage(Principal principal, HttpServletResponse response) throws IOException {
-        if (principal.getName().contains("admin")) {
-            return principal.getName() + ", you have been successfully logged out." + "<br>" +
-                    "<a href='/login'>login</a>" + " or back to " + "<a href='/hello'> hello page </a>";
-        }
-        if (principal.getName().contains("user")) {
-             response.sendRedirect("/login?logout");
-             return null;
-            //return "redirect:/login";
-        } else return "check logoutPage controller";
+//    @GetMapping("/logout")
+//    public String logoutPage(Principal principal, HttpServletResponse response) throws IOException {
+//        if (principal.getName().contains("admin")) {
+//            return principal.getName() + ", you have been successfully logged out." + "<br>" +
+//                    "<a href='/login'>login</a>" + " or back to " + "<a href='/hello'> hello page </a>";
+//        }
+//        if (principal.getName().contains("user")) {
+//             response.sendRedirect("/login?logout");
+//             return null;
+//            //return "redirect:/login";
+//        } else return "check logoutPage controller";
+//    }
+@GetMapping("/logout")
+public String logoutPage(Principal principal, HttpServletResponse response) throws IOException {
+    if (principal.getName().contains("admin")) {
+        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
+                principal.getName() + ", you have been successfully logged out." + "<br>" +
+                "<a href='/login'>login</a>" + " or back to " + "<a href='/hello'> hello page </a>" +
+                "</div>";
     }
+    if (principal.getName().contains("user")) {
+        response.sendRedirect("/login?logout");
+        return null;
+    } else {
+        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
+                "Check logoutPage controller" +
+                "</div>";
+    }
+}
+
 }

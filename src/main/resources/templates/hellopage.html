@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Hello</title>
 </head>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Высота экрана */
+        margin: 0;
+        flex-direction: column; /* Вертикальное расположение элементов */
+        text-align: center; /* Выравнивание текста по центру */
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px; /* Расстояние между текстом и кнопкой */
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+</style>
 <body>
-<h1>Hello, Mentor, you are welcome &#129299</h1>
-
+<h1>&#x1F590;&#xFE0F &#129299 hello, Mentor, you are welcome</h1>
+</h1>&#x2935;&#xFE0F</h1>
 <a th:href="@{/login}" class="btn">&#128065 &#128065</a>
 </body>
 </html>
