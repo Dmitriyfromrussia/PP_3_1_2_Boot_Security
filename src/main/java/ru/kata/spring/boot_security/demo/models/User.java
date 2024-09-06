@@ -27,8 +27,7 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints=
 @UniqueConstraint(columnNames={"name"}))
 @Data
-//@Getter // убрать
-//@Setter // убрать
+
 //@ToString(exclude = "roles") //// Исключаем roles, чтобы избежать рекурсии
 public class User implements UserDetails { // UserDetails стандартизированный интерфейс
 

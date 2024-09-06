@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser != null && existingUser.isEnabled()) {
-            throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует .");
+            throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует");
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -41,17 +41,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(User user) {
         Optional<User> existingUserOptional = userRepository.findById(user.getUserId());
-        if (existingUserOptional.isPresent()) {
-            User existingUser = existingUserOptional.get();
 
-            if (!existingUser.getPassword().equals(user.getPassword())) { //менял ли пароль
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get(); //получили из БД юзера без обновленных данных и удостоверились что но существует
+
+            User userWithDuplicateUsername = userRepository.findByUsername(user.getUsername()); //проверка существует ли в БД юзер с таким же именем
+            if (userWithDuplicateUsername != null && !userWithDuplicateUsername.getUserId().equals(existingUser.getUserId())) {
+                throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует");
+            }
+
+            // Проверка, изменялся ли пароль
+            if (!existingUser.getPassword().equals(user.getPassword())) {
                 user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             } else {
                 user.setPassword(existingUser.getPassword()); // сохранить старый пароль
             }
+
             userRepository.saveAndFlush(user);
         } else {
-            throw new EntityNotFoundException("User not found for updating.");
+            throw new EntityNotFoundException("User for updating not found.");
         }
     }
 
