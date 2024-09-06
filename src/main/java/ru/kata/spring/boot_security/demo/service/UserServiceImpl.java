@@ -25,34 +25,30 @@ public class UserServiceImpl implements UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-//    @Override
-//    @Transactional
-//    public void create(User user) {
-//        if(userRepository.findByUsername(user.getUsername()).isEnabled()) {
-//            throw new U
-//        };
-//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//        userRepository.save(user);
+    @Override
+    @Transactional
+    public void create(User user) {
+        User existingUser = userRepository.findByUsername(user.getUsername());
 
-        @Override
-        @Transactional
-        public void create(User user) {
-            User existingUser = userRepository.findByUsername(user.getUsername());
-
-            if (existingUser != null && existingUser.isEnabled()) {
-                throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует .");
-            }
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+        if (existingUser != null && existingUser.isEnabled()) {
+            throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует .");
         }
-
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 
     @Override
     @Transactional
     public void update(User user) {
-        Optional<User> existingUser = userRepository.findById(user.getUserId());
-        if (existingUser.isPresent()) {
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        Optional<User> existingUserOptional = userRepository.findById(user.getUserId());
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+
+            if (!existingUser.getPassword().equals(user.getPassword())) { //менял ли пароль
+                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            } else {
+                user.setPassword(existingUser.getPassword()); // сохранить старый пароль
+            }
             userRepository.saveAndFlush(user);
         } else {
             throw new EntityNotFoundException("User not found for updating.");
