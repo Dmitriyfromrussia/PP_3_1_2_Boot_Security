@@ -15,7 +15,7 @@ import java.util.Set;
 public class InitMethod {
 
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public InitMethod(UserService userService) {

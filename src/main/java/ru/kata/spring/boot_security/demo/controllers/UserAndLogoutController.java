@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.controllers;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
@@ -52,15 +51,15 @@ public String logoutPage(Principal principal, HttpServletResponse response) thro
                 "<a href='/login'>login</a>" + " or back to " + "<a href='/hello'> hello page </a>" +
                 "</div>";
     }
-    if (principal.getName().contains("user")) {
+    else if (principal.getName().contains("user")) {
         response.sendRedirect("/login?logout");
         return null;
     } else {
-//        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
-//                "Check logoutPage controller" +
-//                "</div>";
-        response.sendRedirect("/login?logout");
-        return null;
+        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
+                "Check logoutPage controller" +
+                "</div>";
+        //response.sendRedirect("/login?logout");
+        //return null;
     }
 }
 
