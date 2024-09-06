@@ -55,9 +55,11 @@ public String logoutPage(Principal principal, HttpServletResponse response) thro
         response.sendRedirect("/login?logout");
         return null;
     } else {
-        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
-                "Check logoutPage controller" +
-                "</div>";
+//        return "<div style='display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; text-align: center;'>" +
+//                "Check logoutPage controller" +
+//                "</div>";
+        response.sendRedirect("/login?logout");
+        return null;
     }
 }
 

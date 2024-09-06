@@ -45,11 +45,14 @@ public class WebSecurityConfig {
                         .successHandler(successUserHandler) // обрабатываем успешный логин эту строку можно убрать
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll()
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/", "GET"))
-                                //logoutUrl("/logout")
-                        );// .logout(LogoutConfigurer::permitAll
-        //logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"));
+//                .logout((logout) -> logout.permitAll()
+//                        .logoutRequestMatcher(new AntPathRequestMatcher("/", "GET"))
+//                );
+                .logout((logout) -> logout
+                        .logoutUrl("/logout") // стандартный URL для выхода
+                        .permitAll()
+                );
+
 
         return http.build();
     }

@@ -60,6 +60,7 @@ public class User implements UserDetails { // UserDetails стандартизи
             name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    //@NotBlank(message = "Необходимо выбрать роль")
     private Set<Role> roles;
 
 
